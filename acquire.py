@@ -1,4 +1,5 @@
 import pandas as pd
+from env import user, password, host
 
 def get_telco_data():
     # Create a SQL query to get the data from SQL
