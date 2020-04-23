@@ -1,4 +1,5 @@
 from sklearn.model_selection import train_test_split
+import pandas as pd
 
 def split_data(df, train_size, seed):
     # Create the train and test sets
