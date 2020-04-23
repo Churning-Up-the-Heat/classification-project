@@ -16,15 +16,20 @@ def drop_columns(df):
 
 def fix_dtypes(df):
     # Setting new customers total charges to zero so we can convert the dtype from object to float
-    telco[telco.total_charges.str.contains(' ')].
+    df.total_charges = df.total_charges.str.replace(' ', '0')
     
-def prep_telco(df):
+    return df
+    
+def prep_telco(df, train_size, seed):
     #1. Split the data
-    train, test, val = split_data(df)
+    train, test, val = split_data(df, train_size, seed)
     
     #2. Drop columns
     train = drop_columns(train)
     test = drop_columns(test)
     val = drop_columns(val)
+    
+    #3. Fix Data Types
+    
 
     return train, test, val
