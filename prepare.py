@@ -1,5 +1,7 @@
-from sklearn.model_selection import train_test_split
 import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
 def split_data(df, train_size, seed):
     # Create the train and test sets
@@ -21,31 +23,21 @@ def fix_dtypes(df):
     df.total_charges = df.total_charges.astype(float)
     
     return df
-    
+
 def prep_telco(df, train_size, seed):
     #1. Split the data
-    train, test, val = split_data(df, train_size, seed)
+    train, test, validate = split_data(df, train_size, seed)
     
     #2. Drop columns
-    train = drop_columns(train)
-    test = drop_columns(test)
-    val = drop_columns(val)
+    train    = drop_columns(train)
+    test     = drop_columns(test)
+    validate = drop_columns(validate)
     
     #3. Fix Data Types
-    train = fix_dtypes(train)
-    test  = fix_dtypes(test)
-    val   = fix_dtypes(val)
+    train    = fix_dtypes(train)
+    test     = fix_dtypes(test)
+    validate = fix_dtypes(validate)
 
-    return train, test, val
+    return train, test, validate
 
 
-def encode_contract_types(train, test, validate):
-    '''Takes in train, test and validate dataframes
-    Returns each df with a new coloumn for encoded contract types 
-    as well as the encoder used'''
-    encoder = LabelEncoder()
-    encoder.fit(train.contract_type)
-    train["contract_type_encoded"] = encoder.transform(train.contract_type)
-    test["contract_type_encoded"] = encoder.transform(test.contract_type)
-    validate["contract_type_encoded"] = encoder.transform(validate.contract_type)
-    return encoder, train, test, validate
