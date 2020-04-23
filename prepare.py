@@ -34,3 +34,15 @@ def prep_telco(df, train_size, seed):
     
 
     return train, test, val
+
+
+def encode_contract_types(train, test, validate):
+    '''Takes in train, test and validate dataframes
+    Returns each df with a new coloumn for encoded contract types 
+    as well as the encoder used'''
+    encoder = LabelEncoder()
+    encoder.fit(train.contract_type)
+    train["contract_type_encoded"] = encoder.transform(train.contract_type)
+    test["contract_type_encoded"] = encoder.transform(test.contract_type)
+    validate["contract_type_encoded"] = encoder.transform(validate.contract_type)
+    return encoder, train, test, validate
