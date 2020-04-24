@@ -9,3 +9,5 @@
 * model.py - python file taking in data and generates a csv of predictions
 
 * predictions.csv - Contains the results of running the model.py file
+
+# Data Dictionary

@@ -18,7 +18,7 @@ def encode_contract_types(train, test, validate):
     train["contract_type_encoded"] = encoder.transform(train.contract_type)
     test["contract_type_encoded"] = encoder.transform(test.contract_type)
     validate["contract_type_encoded"] = encoder.transform(validate.contract_type)
-    return encoder, train, test, validate
+    return train, test, validate
 
 def encode_internet_service_types(train, test, validate):
     '''Takes in train, test and validate dataframes
@@ -29,7 +29,7 @@ def encode_internet_service_types(train, test, validate):
     train["encoded_internet_service_type"] = encoder.transform(train.internet_service_type)
     test["encoded__service_type"] = encoder.transform(test.internet_service_type)
     validate["encoded__service_type"] = encoder.transform(validate.internet_service_type)
-    return encoder, train, test, validate
+    return train, test, validate
 
 def encode_payment_types(train, test, validate):
     '''Takes in train, test and validate dataframes
@@ -40,7 +40,7 @@ def encode_payment_types(train, test, validate):
     train["payment_type_encoded"] = encoder.transform(train.payment_type)
     test["payment_type_encoded"] = encoder.transform(test.payment_type)
     validate["payment_type_encoded"] = encoder.transform(validate.payment_type)
-    return encoder, train, test, validate
+    return train, test, validate
 
 def encode_churn(train, test, validate):
     '''Takes in train, test and validate dataframes
@@ -51,19 +51,56 @@ def encode_churn(train, test, validate):
     train["churn_encoded"] = encoder.transform(train.churn)
     test["churn_encoded"] = encoder.transform(test.churn)
     validate["churn_encoded"] = encoder.transform(validate.churn)
-    return encoder, train, test, validate
+    return train, test, validate
 
+def encode_online_security(train, test, validate):
+    encoder = LabelEncoder()
+    encoder.fit(train.online_security)
+    train["online_security_encoded"] = encoder.transform(train.online_security)
+    test["online_security_encoded"] = encoder.transform(test.online_security)
+    validate["online_security_encoded"] = encoder.transform(validate.online_security)
+    return train, test, validate
+
+def encode_tech_support(train, test, validate):
+    encoder = LabelEncoder()
+    encoder.fit(train.tech_support)
+    train["tech_support_encoded"] = encoder.transform(train.tech_support)
+    test["tech_support_encoded"] = encoder.transform(test.tech_support)
+    validate["tech_support_encoded"] = encoder.transform(validate.tech_support)
+    return train, test, validate
+
+def encode_device_protection(train, test, validate):
+    encoder = LabelEncoder()
+    encoder.fit(train.device_protection)
+    train["device_protection_encoded"] = encoder.transform(train.device_protection)
+    test["device_protection_encoded"] = encoder.transform(test.device_protection)
+    validate["device_protection_encoded"] = encoder.transform(validate.device_protection)
+    return train, test, validate
+
+def encode_online_backup(train, test, validate):
+    encoder = LabelEncoder()
+    encoder.fit(train.online_backup)
+    train["online_backup_encoded"] = encoder.transform(train.online_backup)
+    test["online_backup_encoded"] = encoder.transform(test.online_backup)
+    validate["online_backup_encoded"] = encoder.transform(validate.online_backup)
+    return train, test, validate
 
 def encoded_df(train, test, validate):
     '''takes in train, test, and validate df and encoded the following:
-    contract_types
-    internet service types
-    churn
-    payment types
-    returns encoders for each and train, test, validate
+        contract_types
+        internet service types
+        churn
+        payment types
+    returns train, test, validate
     '''
-    encoder_1, train, test, validate = encode_contract_types(train, test, validate)
-    encoder_2, train, test, validate = encode_internet_service_types(train, test, validate)
-    encoder_3, train, test, validate = encode_churn(train, test, validate)
-    encoder_4, train, test, validate = encode_payment_types(train, test, validate)
-    return encoder_1, encoder_2, encoder_3, encoder_4, train, test, validate
+    train, test, validate = encode_contract_types(train, test, validate)
+    train, test, validate = encode_internet_service_types(train, test, validate)
+    train, test, validate = encode_churn(train, test, validate)
+    train, test, validate = encode_payment_types(train, test, validate)
+    train, test, validate = encode_online_security(train, test, validate)
+    train, test, validate = encode_tech_support(train, test, validate)
+    train, test, validate = encode_device_protection(train, test, validate)
+    train, test, validate = encode_online_backup(train, test, validate)
+    
+    return train, test, validate
+
