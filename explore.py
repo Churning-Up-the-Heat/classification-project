@@ -99,3 +99,34 @@ def churn_rate_for_contract_types_at_12_months(train):
     plt.legend(title=x2)
     plt.xticks(rotation=0)
     plt.xlabel('')
+    
+def stats_for_contract_types(train):
+    '''
+    Takes in a training dataframe and returns a new dataframe with the following:
+    Min, max, std, median for each contract type
+    '''
+    
+    monthly_charges_mean = pd.DataFrame((train.groupby("contract_type")).monthly_charges.mean())
+    monthly_charges_mean.columns = ['Mean monthly charges']
+    
+    monthly_charges_median = pd.DataFrame((train.groupby("contract_type")).monthly_charges.median())
+    monthly_charges_median.columns = ['Median monthly charges']
+    
+    monthly_charges_max = pd.DataFrame((train.groupby("contract_type")).monthly_charges.max())
+    monthly_charges_max.columns = ['Max monthly charges']
+    
+    monthly_charges_min = pd.DataFrame((train.groupby("contract_type")).monthly_charges.min())
+    monthly_charges_min.columns = ['Min monthly charges']
+    
+    monthly_charges_std = pd.DataFrame((train.groupby("contract_type")).monthly_charges.std())
+    monthly_charges_std.columns = ['STD monthly charges']
+    
+    summary1 = pd.merge(monthly_charges_mean, monthly_charges_median, left_index=True, right_index=True)
+    
+    summary2 = pd.merge(monthly_charges_max , monthly_charges_min, left_index=True, right_index=True)
+    
+    summary3 = pd.merge(summary1 , summary2 , left_index=True, right_index=True)
+    
+    df = pd.merge(summary3 , monthly_charges_std, left_index=True, right_index=True)
+    
+    return df
