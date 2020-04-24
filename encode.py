@@ -85,6 +85,7 @@ def encode_online_backup(train, test, validate):
     validate["online_backup_encoded"] = encoder.transform(validate.online_backup)
     return train, test, validate
 
+
 def encoded_df(train, test, validate):
     '''takes in train, test, and validate df and encoded the following:
         contract_types
