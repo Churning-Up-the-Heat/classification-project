@@ -54,6 +54,7 @@ def encode_churn(train, test, validate):
     return encoder, train, test, validate
 
 
+
 def encoded_df(train, test, validate):
     '''takes in train, test, and validate df and encoded the following:
     contract_types

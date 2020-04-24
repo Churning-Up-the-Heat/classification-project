@@ -50,14 +50,8 @@ def plot_all_categoricals_with_churn_rates(train):
     #1. plot contract_type
     plot_categorical_with_churn_rates(train, "contract_type")
     
-    #2. plot gender_type
-    plot_categorical_with_churn_rates(train, "gender")
-    
     #3. plot partner
     plot_categorical_with_churn_rates(train, "partner")
-    
-    #4. plot dependents
-    plot_categorical_with_churn_rates(train, "dependents")
 
     #5. plot phone_service
     plot_categorical_with_churn_rates(train, "phone_service")
