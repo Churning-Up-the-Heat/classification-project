@@ -1,3 +1,7 @@
+import acquire
+import prepare
+import encode
+
 import pandas as pd
 
 from sklearn.linear_model import LogisticRegression
@@ -18,7 +22,16 @@ def choose_features(train, validate):
     return X_train, y_train, X_validate, y_validate
         
 def create_log_reg_model(train, validate):
-    # Split by Features to be Used
+    # Acquire the Data
+    df = acquire.get_telco_data()
+    
+    # Prepare/Split the Data
+    train, test, validate = prepare.prep_telco(df, train_size=.8, seed=123)
+    
+    # Encode the Data
+    train, test, validate = encode.encoded_df(train, test, validate)
+    
+    # Determine Features
     X_train, y_train, X_validate, y_validate = choose_features(train, validate)           
     
     # Create and Fit the Model
@@ -35,6 +48,4 @@ def create_log_reg_model(train, validate):
     predictions.to_csv('predictions.csv')
     
     return log_reg_model, predictions
-    
-    
     
