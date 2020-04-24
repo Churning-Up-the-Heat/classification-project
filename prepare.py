@@ -25,6 +25,7 @@ def fix_dtypes(df):
     return df
 
 def prep_telco(df, train_size, seed):
+    
     #1. Split the data
     train, test, validate = split_data(df, train_size, seed)
     
@@ -37,7 +38,13 @@ def prep_telco(df, train_size, seed):
     train    = fix_dtypes(train)
     test     = fix_dtypes(test)
     validate = fix_dtypes(validate)
+    
+    #4. Add tenure years to each
+    train["tenure_years"] = (train.tenure / 12).round()
+    test["tenure_years"] = (test.tenure / 12).round()
+    validate["tenure_years"] = (validate.tenure / 12).round()
 
     return train, test, validate
+
 
 
