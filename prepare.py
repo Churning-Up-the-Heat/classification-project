@@ -49,8 +49,8 @@ def create_phone_lines_variable(train, test, validate):
     
     #convert phone_service to an integer
     train["phone_service"] = train.phone_service.astype("int")
-    test["phone_service"] = train.phone_service.astype("int")
-    validate["phone_service"] = train.phone_service.astype("int")
+    test["phone_service"] = test.phone_service.astype("int")
+    validate["phone_service"] = validate.phone_service.astype("int")
     
     #encode multiple_lines
     train["multiple_lines"] = train.multiple_lines.str.replace('No', "0")
