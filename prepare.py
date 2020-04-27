@@ -30,6 +30,9 @@ def create_phone_lines_variable(train, test, validate):
     takes in train, test, validate dataframes and creates a new column that represents
     the information from phone_service and multiple_line in one variable 
     returns train, test, and validate df
+    0 = No Phone Service
+    1 = Single Phone Line
+    2 = Multiple Lines
     '''
     #encode phone_service
     train["phone_service"] = train.phone_service.str.replace('No', "0")
@@ -72,8 +75,48 @@ def create_phone_lines_variable(train, test, validate):
     validate["phone_lines"] = validate["phone_service"] + validate["multiple_lines"]
     test["phone_lines"] = test["multiple_lines"] + test["phone_service"]
     
+    #drop phone_service and mulitple_lines columns
+    train.drop(columns=["multiple_lines", "phone_service"], inplace=True)
+    test.drop(columns=["multiple_lines", "phone_service"], inplace=True)
+    validate.drop(columns=["multiple_lines", "phone_service"], inplace=True)
+    
     return train, test, validate
 
+
+def dependent_partner_grouping(train, test, validate):
+    '''
+    takes in train, test, validate dataframes and creates a new column that represents
+    the information from partner and dependents into one variable 
+    returns train, test, and validate df
+    0 = No partner or dependant
+    1 = Either a dependent or partner
+    2 = Both a dependent and partner
+    '''
+    
+    #encode partner
+    encoder = LabelEncoder()
+    encoder.fit(train.partner)
+    train["partner_encoded"] = encoder.transform(train.partner)
+    test["partner_encoded"] = encoder.transform(test.partner)
+    validate["partner_encoded"] = encoder.transform(validate.partner)
+    
+    #encode dependents
+    encoder.fit(train.dependents)
+    train["dependents_encoded"] = encoder.transform(train.dependents)
+    test["dependents_encoded"] = encoder.transform(test.dependents)
+    validate["dependents_encoded"] = encoder.transform(validate.dependents)
+    
+    # create new variable by summing the encoded
+    train["dependent_partner_grouping"] = train["partner_encoded"] + train["dependents_encoded"]
+    test["dependent_partner_grouping"] = test["partner_encoded"] + test["dependents_encoded"]
+    validate["dependent_partner_grouping"] = validate["partner_encoded"] + validate["dependents_encoded"]
+    
+    #drop encoded partner and dependents column
+    train.drop(columns=["partner_encoded", "dependents_encoded"], inplace=True)
+    test.drop(columns=["partner_encoded", "dependents_encoded"], inplace=True)
+    validate.drop(columns=["partner_encoded", "dependents_encoded"], inplace=True)
+    
+    return train, test, validate
 
 
 def prep_telco(df, train_size=.8, seed=123):
@@ -98,6 +141,9 @@ def prep_telco(df, train_size=.8, seed=123):
     
     #5 Add phone_lines features
     train, test, validate = create_phone_lines_variable(train, test, validate)
+    
+    # Add dependent_partner_grouping
+    train, test, validate = dependent_partner_grouping(train, test, validate)
 
     return train, test, validate
 
