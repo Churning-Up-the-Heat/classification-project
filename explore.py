@@ -13,19 +13,134 @@ def lineplot_rate_of_churn_to_tenure_months(df):
     df_plot = df.groupby('tenure').churn_encoded.mean().reset_index()
     plt.figure('figure', figsize=(13, 10))
     plt.title("Tenure in months vs Rate of Churn", fontsize=17)
-    sns.lineplot(df_plot.tenure, df_plot.churn_encoded, color="Purple")
+    ax = sns.lineplot(x="tenure", y="churn_encoded", data=df, color="Purple")
     plt.ylabel('Churn Rate')
-
+    
 
 def lineplot_rate_of_churn_to_tenure_years(df):
     '''function to plot rate of churn and tenure (in years)'''
     df_plot = df.groupby('tenure_years').churn_encoded.mean().reset_index()
     plt.figure('figure', figsize=(13, 10))
     plt.title("Tenure in years vs Rate of Churn", fontsize=17)
-    sns.lineplot(df_plot.tenure_years, df_plot.churn_encoded, color="Purple")
+    ax = sns.lineplot(x="tenure_years", y="churn_encoded", data=df, color="Purple")
     plt.ylabel('Churn Rate')
 
+    
+def isolated_tenure_distros(train):
+    '''Plots the disrobution of Tenure for all contract types individually'''
+    month_to_month = train[train.contract_type == "Month-to-month"]
+    one_year = train[train.contract_type == "One year"]
+    two_year = train[train.contract_type == "Two year"]
 
+    plt.figure(figsize=(13,10))
+    plt.suptitle('Isolated Visualizations of Tenure Distributions - note Y axis is not on the same scale', fontsize=14)
+    
+    #Distro for All contract types
+    plt.subplot(2,2,1)
+    plt.title("All Contract Types", fontsize=14)
+    sns.distplot(train.tenure, color="Purple")
+    plt.ylabel("Count")
+    
+    #Distro for Month to Month
+    plt.subplot(2,2,2)
+    plt.title("Month to Month Contracts", fontsize=14)
+    sns.distplot(month_to_month.tenure, color="Purple")
+
+    #Distro for one year
+    plt.subplot(2,2,3)
+    plt.title("One Year Contracts", fontsize=14)
+    sns.distplot(one_year.tenure, color="Purple")
+
+    #Distro for two year
+    plt.subplot(2,2,4)
+    plt.title("Two Year Contracts", fontsize=14)
+    sns.distplot(two_year.tenure, color="Purple")
+    
+    
+def tenure_distros_overlayed(train):
+    '''Plots the disrobution of Tenure for all contract types and overlays them for comparision'''
+    month_to_month = train[train.contract_type == "Month-to-month"]
+    one_year = train[train.contract_type == "One year"]
+    two_year = train[train.contract_type == "Two year"]
+
+    plt.figure(figsize=(13,10))
+    plt.title("Tenure Distributions by Contract Type", fontsize=14)
+    sns.distplot(month_to_month.tenure, color="Purple", label="Month to Month")
+    sns.distplot(one_year.tenure, color="Grey", label="One Year")
+    sns.distplot(two_year.tenure, color="Blue", label="Two Year")
+    plt.legend()
+    
+    
+    
+def monthly_charges_distros(train):
+    '''Plots the disrobution of Monthly Charges for all contract types'''
+    month_to_month = train[train.contract_type == "Month-to-month"]
+    one_year = train[train.contract_type == "One year"]
+    two_year = train[train.contract_type == "Two year"]
+
+    plt.figure(figsize=(15,12))
+    plt.suptitle('Distribution of Monthly Charges - note Y axis is not on the same scale', fontsize=18)
+    
+    #Distro for All contract types
+    plt.subplot(2,2,1)
+    plt.title("All Contract Types", fontsize=14)
+    sns.distplot(train.monthly_charges, color="Purple")
+    plt.ylabel("Count")
+    
+    #Distro for Month to Month
+    plt.subplot(2,2,2)
+    plt.title("Month to Month Contracts", fontsize=14)
+    sns.distplot(month_to_month.monthly_charges, color="Purple")
+
+    #Distro for one year
+    plt.subplot(2,2,3)
+    plt.title("One Year Contracts", fontsize=14)
+    sns.distplot(one_year.monthly_charges, color="Purple")
+
+    #Distro for two year
+    plt.subplot(2,2,4)
+    plt.title("Two Year Contracts", fontsize=14)
+    sns.distplot(two_year.monthly_charges, color="Purple")  
+
+    
+def churn_percentages_at_12_months(train):
+    '''
+    Gives us a stacked bar plot for each of the contract types churn rates when they reach the
+    12 month marker
+    '''
+    df_tenure_at_one_year = train[train.tenure == 12]
+    x1 = "contract_type"
+    x2 = "churn"
+    (df_tenure_at_one_year.groupby(x1)[x2]
+     .apply(lambda s: s.value_counts(normalize=True)) # custom aggregation to get value counts by group
+     .unstack() # turn an index into columns
+     .plot.bar(stacked=True, width=.9, color=["Grey", "Purple"]))
+    plt.title("Churn percentage for each contract type at 12 months")
+    plt.legend(title=x2)
+    plt.xticks(rotation=0)
+    plt.xlabel('')    
+        
+
+def stacked_barplot_for_churn_rates_by_contract(train):
+    '''
+    Helps visualize the churn rates for each contract type in a stacked bar plot
+    '''
+
+    x1 = "contract_type"
+    x2 = "churn"
+
+    plt.rc('figure', figsize=(13, 10))
+    plt.rc('font', size=13)
+
+    (train.groupby(x1)[x2]
+     .apply(lambda s: s.value_counts(normalize=True)) # custom aggregation to get value counts by group
+     .unstack() # turn an index into columns
+     .plot.bar(stacked=True, width=.9, color=["Grey", "Purple"]))
+    plt.legend(title=x2)
+    plt.xticks(rotation=0)
+    plt.xlabel('')
+
+    
 def corr_heatmap(df):
     '''heatmap to explore correlations of numerical categories'''
     plt.figure('figure', figsize=(13, 10))
@@ -130,3 +245,20 @@ def stats_for_contract_types(train):
     df = pd.merge(summary3 , monthly_charges_std, left_index=True, right_index=True)
     
     return df
+
+
+def price_threshold_internet_services(train):
+    '''Barplot allows us to look at price Thresholds fot the different internet service types'''
+    train["monthly_bins"] = pd.cut(train.monthly_charges,3)
+    plt.figure(figsize=(13, 10))
+    sns.barplot(x="monthly_bins", y="churn_encoded", data=train, hue="internet_service_type", color="m")
+    plt.hlines(y=train.churn_encoded.mean(), xmin=-1, xmax=3, ls=":")
+    plt.title("Price Threshold for Internet Service Type")
+    
+    
+def price_threshold_phone_service(train):
+    train["monthly_bins"] = pd.cut(train.monthly_charges,3)
+    plt.figure(figsize=(13, 10))
+    sns.barplot(x="monthly_bins", y="churn_encoded", data=train, hue="phone_service", color="m")
+    plt.hlines(y=train.churn_encoded.mean(), xmin=-1, xmax=3, ls=":")
+    plt.title("Price Threshold for Phone Service")
