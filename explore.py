@@ -141,11 +141,11 @@ def stacked_barplot_for_churn_rates_by_contract(train):
     plt.xlabel('')
 
     
-def corr_heatmap(df):
+def initial_corr_heatmap(df):
     '''heatmap to explore correlations of numerical categories'''
     plt.figure('figure', figsize=(13, 10))
     plt.title("Heatmap of Correlations", fontsize=13)
-    sns.heatmap(df.corr(), annot=True, cmap='Purples', fmt='.2%')
+    sns.heatmap(df.corr(), cmap='Purples', fmt='.2%')
 
 
 def plot_categorical_with_churn_rates(df, column_name):
@@ -168,37 +168,34 @@ def plot_all_categoricals_with_churn_rates(train):
     #3. plot partner
     plot_categorical_with_churn_rates(train, "partner")
 
-    #5. plot phone_service
-    plot_categorical_with_churn_rates(train, "phone_service")
+    #5. plot phone_lines
+    plot_categorical_with_churn_rates(train, "phone_lines")
     
-    #6. plot multiple_lines
-    plot_categorical_with_churn_rates(train, "multiple_lines")
-    
-    #7. plot online_security
+    #6. plot online_security
     plot_categorical_with_churn_rates(train, "online_security")
     
-    #8. plot device_protection
+    #7. plot device_protection
     plot_categorical_with_churn_rates(train, "device_protection")
     
-    #9. plot device_protection
+    #8. plot device_protection
     plot_categorical_with_churn_rates(train, "online_backup")
     
-    #10. plot tech_support
+    #9. plot tech_support
     plot_categorical_with_churn_rates(train, "tech_support")
     
-    #11. plot streaming_tv
+    #10. plot streaming_tv
     plot_categorical_with_churn_rates(train, "streaming_tv")
     
-    #12. plot streaming_movies
+    #11. plot streaming_movies
     plot_categorical_with_churn_rates(train, "streaming_movies")
     
-    #13. plot paperless_billing
+    #12. plot paperless_billing
     plot_categorical_with_churn_rates(train, "paperless_billing")
     
-    #14. plot internet_service_type
+    #13. plot internet_service_type
     plot_categorical_with_churn_rates(train, "internet_service_type")
     
-    #15. plot payment_type
+    #14. plot payment_type
     plot_categorical_with_churn_rates(train, "payment_type")
     
     
@@ -256,9 +253,9 @@ def price_threshold_internet_services(train):
     plt.title("Price Threshold for Internet Service Type")
     
     
-def price_threshold_phone_service(train):
-    train["monthly_bins"] = pd.cut(train.monthly_charges,3)
+def price_threshold_phone_lines(train):
+    train["monthly_bins"] = pd.cut(train.monthly_charges,5)
     plt.figure(figsize=(13, 10))
-    sns.barplot(x="monthly_bins", y="churn_encoded", data=train, hue="phone_service", color="m")
-    plt.hlines(y=train.churn_encoded.mean(), xmin=-1, xmax=3, ls=":")
-    plt.title("Price Threshold for Phone Service")
+    sns.barplot(x="monthly_bins", y="churn_encoded", data=train, hue="phone_lines", color="m")
+    plt.hlines(y=train.churn_encoded.mean(), xmin=-1, xmax=5, ls=":")
+    plt.title("Price Threshold for Phone Services where 0 is none, 1 is single line, 2 is multi line")
