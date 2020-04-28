@@ -68,7 +68,7 @@ def tenure_distros_overlayed(train):
     plt.title("Tenure Distributions by Contract Type", fontsize=14)
     sns.distplot(month_to_month.tenure, color="#7870d5", label="Month to Month")
     sns.distplot(one_year.tenure, color="Grey", label="One Year")
-    sns.distplot(two_year.tenure, color="216cdb", label="Two Year")
+    sns.distplot(two_year.tenure, color="#216cdb", label="Two Year")
     plt.legend()
     
     
@@ -115,7 +115,7 @@ def churn_percentages_at_12_months(train):
     (df_tenure_at_one_year.groupby(x1)[x2]
      .apply(lambda s: s.value_counts(normalize=True)) # custom aggregation to get value counts by group
      .unstack() # turn an index into columns
-     .plot.bar(stacked=True, width=.9, color=["216cdb", "#7870d5"]))
+     .plot.bar(stacked=True, width=.9, color=["#216cdb", "#7870d5"]))
     plt.title("Churn percentage for each contract type at 12 months")
     plt.legend(title=x2)
     plt.xticks(rotation=0)
@@ -136,7 +136,7 @@ def stacked_barplot_for_churn_rates_by_contract(train):
     (train.groupby(x1)[x2]
      .apply(lambda s: s.value_counts(normalize=True)) # custom aggregation to get value counts by group
      .unstack() # turn an index into columns
-     .plot.bar(stacked=True, width=.9, color=["216cdb", "#7870d5"]))
+     .plot.bar(stacked=True, width=.9, color=["#216cdb", "#7870d5"]))
     plt.legend(title=x2)
     plt.xticks(rotation=0)
     plt.xlabel('')
@@ -207,7 +207,7 @@ def churn_rate_for_contract_types_at_12_months(train):
     (train.groupby(x1)[x2]
      .apply(lambda s: s.value_counts(normalize=True)) # custom aggregation to get value counts by group
      .unstack() # turn an index into columns
-     .plot.bar(stacked=True, width=.9, color=["216cdb", "#7870d5"]))
+     .plot.bar(stacked=True, width=.9, color=["#216cdb", "#7870d5"]))
     plt.title("Churn percentage for each contract type at 12 months")
     plt.legend(title=x2)
     plt.xticks(rotation=0)
