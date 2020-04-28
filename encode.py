@@ -9,13 +9,22 @@ from sklearn.preprocessing import LabelEncoder
 
 from sklearn.model_selection import train_test_split
 
-def create_encoded_dfs(train, test, validate, columns_to_encode):
-    cols = columns_to_encode
+def create_encoded_dfs(train, test, validate):
+
+    cols = ['contract_type', 'internet_service_type', 'churn',
+            'payment_type', 'online_security', 'tech_support',
+            'device_protection', 'online_backup', 'paperless_billing',
+            'partner', 'dependents', 'internet_service_type', 
+            'streaming_tv', 'streaming_movies']
+    
     encoded_train    = train.copy()
     encoded_test     = test.copy()
     encoded_validate = validate.copy()
     
     for col in cols:
+        for df in [train, test, validate]:
+            df[col].str.replace('No internet service', '0')
+            df[col].str.replace('No phone service', '0')
         encoder = LabelEncoder()
         encoder.fit(encoded_train[col])
         
