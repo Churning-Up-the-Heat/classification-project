@@ -9,6 +9,22 @@ from sklearn.preprocessing import LabelEncoder
 
 from sklearn.model_selection import train_test_split
 
+def create_encoded_dfs(train, test, validate, columns_to_encode):
+    cols = columns_to_encode
+    encoded_train    = train.copy()
+    encoded_test     = test.copy()
+    encoded_validate = validate.copy()
+    
+    for col in cols:
+        encoder = LabelEncoder()
+        encoder.fit(encoded_train[col])
+        
+        encoded_train[col]    = encoder.transform(encoded_train[col])
+        encoded_test[col]     = encoder.transform(encoded_test[col])
+        encoded_validate[col] = encoder.transform(encoded_validate[col])
+        
+    return encoded_train, encoded_test, encoded_validate
+
 def encode_contract_types(train, test, validate):
     '''Takes in train, test and validate dataframes
     Returns each df with a new coloumn for encoded contract types 
