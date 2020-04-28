@@ -11,8 +11,8 @@
 * predictions.csv - Contains the results of running the model.py file
 
 # Data Dictionary
-|      DataFrame Column      |          SQL Column         |                                             Description                                            |
-|:--------------------------:|:---------------------------:|:--------------------------------------------------------------------------------------------------:|
+| DataFrame Column           | SQL Column                  | Description                                                                                        |
+|----------------------------|-----------------------------|----------------------------------------------------------------------------------------------------|
 | tenure                     | tenure                      | How long (in months) a customer has been with the company                                          |
 | contract_type_encoded      | contract_type               | Contract types: Monthly, 1 year, 2 years                                                           |
 | monthly_charges            | monthly_charges             | What the customer pays monthly. Assessed to be the last recorded month's payment                   |
