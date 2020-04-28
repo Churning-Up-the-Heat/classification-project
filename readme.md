@@ -33,3 +33,18 @@
 | churn_encoded              | churn                       | Determines if a customer has discontinued their service for the company's product                  |
 | phone_lines                | phone_service/multiple_line | Determine is a customer has phone service, and how many lines they have                            |
 | dependent_partner_grouping | dependents/partner          | Determines if the costumer has a partner, dependents, or neither                                   |
+
+# Project Conclusions
+
+## Key Takeaways
+    - What kind of contract the customer has plays a large role in if they will churn:
+        * ~43% of customers on monthly contracts are likely to churn, as opposed to yearly (~12%) and two years(~3%)
+    - The most churn occurs in the first few months of tenure, and then again at 6 years of tenure (~70 months)
+        * This is either an indication that customers are churning for some reason before getting a 4th two year contract, or the data we are working with is only looking at a period of time about 6 years long
+        
+    - Senior citizens are more likely to churn:
+        * Making up 17 percent of the customer base, being a senior citizen does not impact modeling
+        * Senior citizens pay more on monthly rates. Offering lower monthly rates could retain more senior citizens
+    - 
+
+## Moving Forward
