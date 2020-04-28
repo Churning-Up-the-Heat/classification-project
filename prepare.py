@@ -110,11 +110,7 @@ def dependent_partner_grouping(train, test, validate):
     train["dependent_partner_grouping"] = train["partner_encoded"] + train["dependents_encoded"]
     test["dependent_partner_grouping"] = test["partner_encoded"] + test["dependents_encoded"]
     validate["dependent_partner_grouping"] = validate["partner_encoded"] + validate["dependents_encoded"]
-    
-    #drop encoded partner and dependents column
-    train.drop(columns=["partner_encoded", "dependents_encoded"], inplace=True)
-    test.drop(columns=["partner_encoded", "dependents_encoded"], inplace=True)
-    validate.drop(columns=["partner_encoded", "dependents_encoded"], inplace=True)
+
     
     return train, test, validate
 
@@ -144,6 +140,7 @@ def prep_telco(df, train_size=.8, seed=123):
     
     # Add dependent_partner_grouping
     train, test, validate = dependent_partner_grouping(train, test, validate)
+    
 
     return train, test, validate
 
