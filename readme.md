@@ -36,6 +36,7 @@ To answer this question we had to figure out the reasons behind churning. We nee
 - $H_0$ - Being a senior citizen is independent of churning
 - $H_0$ - Gender is independent of churning
 - $H_0$ - Having dependents is independent of churning
+- $H_0$ - There is no difference between Monthly contracts churn rate and the average churn rate.
 
 
 # Data Dictionary
