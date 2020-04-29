@@ -1,51 +1,49 @@
 import acquire
 import prepare
+import features
 import encode
 
 import pandas as pd
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 
-def choose_features(train, validate):
-    X_train = train[['tenure', 
-                     'contract_type_encoded', 
-                     'monthly_charges', 
-                     'payment_type_encoded']]
-    y_train = train.churn_encoded
-
-    X_validate = validate[['tenure', 
-                           'contract_type_encoded', 
-                           'monthly_charges', 
-                           'payment_type_encoded']]
-    y_validate = validate.churn_encoded 
-    
-    return X_train, y_train, X_validate, y_validate
-        
-def create_log_reg_model(train, validate):
-    # Acquire the Data
+def run_model():
+    # Get the Data
     df = acquire.get_telco_data()
+
+    # Prepare the Data
+    df = prepare.drop_columns(df)
+    df = prepare.fix_dtypes(df)
+
+    # Add Features
+    df = features.create_features(df)
+
+    # Encode DataFrame
+    df = encode.encode_df(df)
+
+    # Select features to be used in the model
+    cols = ['contract_type', 
+            'tenure',
+            'monthly_charges',
+            'payment_type',
+            'has_internet']
+
+    X = df[cols]
+    y = df.churn
     
-    # Prepare/Split the Data
-    train, test, validate = prepare.prep_telco(df, train_size=.8, seed=123)
-    
-    # Encode the Data
-    train, test, validate = encode.encoded_df(train, test, validate)
-    
-    # Determine Features
-    X_train, y_train, X_validate, y_validate = choose_features(train, validate)           
-    
-    # Create and Fit the Model
-    log_reg_model = LogisticRegression().fit(X_train, y_train)
-    
-    # Predict
-    predictions = pd.DataFrame(
-        {'actual': y_validate,
-         'log_reg_model_predictions': log_reg_model.predict(X_validate),
-         'log_reg_model_probabilities': log_reg_model.predict_proba(X_validate)[:, 1]
+    # Create and fit the model
+    forest = RandomForestClassifier(n_estimators=100, 
+                                      max_depth=9,
+                                      random_state=123).fit(X, y)
+
+    # Create a DataFrame to hold predictions
+    results = pd.DataFrame(
+        {'Costumer_ID': df.customer_id,
+         'Model_Predictions': forest.predict(X),
+         'Model_Probabilities': forest.predict_proba(X)[:,1]
         })
 
     # Generate csv
-    predictions.to_csv('predictions.csv')
-    
-    return log_reg_model, predictions
-    
+    results.to_csv('model_results.csv')
+
+    return results

@@ -34,6 +34,20 @@ def create_encoded_dfs(train, test, validate):
         
     return encoded_train, encoded_test, encoded_validate
 
+def encode_df(df):
+    cols = ['contract_type', 'internet_service_type', 'churn',
+            'payment_type', 'online_security', 'tech_support',
+            'device_protection', 'online_backup', 'paperless_billing',
+            'partner', 'dependents', 'internet_service_type', 
+            'streaming_tv', 'streaming_movies']
+        
+    for col in cols:
+        encoder = LabelEncoder()
+        encoder.fit(df[col])
+        df[col] = encoder.transform(df[col])
+        
+    return df
+        
 def encode_contract_types(train, test, validate):
     '''Takes in train, test and validate dataframes
     Returns each df with a new coloumn for encoded contract types 
